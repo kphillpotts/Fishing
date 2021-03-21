@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Fishing.OnboardingPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:models="clr-namespace:Fishing.Models"
+    xmlns:viewModels="clr-namespace:Fishing.ViewModels">
+    <ContentPage.BindingContext>
+        <viewModels:OnboardingViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <Style x:Key="IndicatorStyle" TargetType="Image">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Source" Value="UnselectedIndicator" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="Source" Value="SelectedIndicator" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+
+    <ContentPage.Content>
+        <Grid
+            BackgroundColor="{StaticResource Background}"
+            RowDefinitions="1.5*, 1*"
+            RowSpacing="0">
+            <BoxView Color="Yellow" />
+            <CarouselView
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                IndicatorView="indicatorView"
+                ItemsSource="{Binding Items}">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate x:DataType="models:OnboardingModel">
+                        <Grid RowDefinitions="1.5*, 1*" RowSpacing="0">
+
+                            <Image Aspect="AspectFill" Source="{Binding Image}" />
+
+                            <StackLayout Grid.Row="1" Spacing="0">
+                                <Label
+                                    FontFamily="BoldFont"
+                                    LineHeight=".9"
+                                    Style="{StaticResource OnboardingHeader}"
+                                    Text="{Binding Title}" />
+                                <Label
+                                    FontFamily="SemiBoldFont"
+                                    FontSize="16"
+                                    MaxLines="2"
+                                    Style="{StaticResource OnboardingContent}"
+                                    Text="{Binding Content}" />
+
+                            </StackLayout>
+
+                        </Grid>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <magic:GradientView Margin="0,0,0,-1">
+                <magic:GradientCollection>
+                    <magic:RadialGradient
+                        x:Name="MyRadialGradient"
+                        Center=".3,0"
+                        RadiusX="3000">
+                        <magic:GradientStop Offset="0" Color="Transparent" />
+                        <magic:GradientStop Offset=".9" Color="Transparent" />
+                        <magic:GradientStop Offset="1" Color="{StaticResource Background}" />
+                    </magic:RadialGradient>
+                </magic:GradientCollection>
+            </magic:GradientView>
+
+
+            <!--<BoxView Grid.Row="1" Color="{StaticResource Background}" />-->
+            <StackLayout
+                Grid.Row="1"
+                Orientation="Vertical"
+                VerticalOptions="End">
+                <!--<Slider
+                    Maximum="10"
+                    Minimum="0"
+                    ValueChanged="Slider_ValueChanged"
+                    Value="1" />-->
+            </StackLayout>
+
+
+
+            <Grid
+                Grid.Row="1"
+                Margin="20"
+                ColumnDefinitions="*,*"
+                HeightRequest="60"
+                VerticalOptions="End">
+
+                <IndicatorView
+                    x:Name="indicatorView"
+                    HorizontalOptions="Start"
+                    IndicatorColor="Transparent"
+                    SelectedIndicatorColor="Transparent">
+                    <IndicatorView.IndicatorTemplate>
+                        <DataTemplate>
+                            <Image Source="UnSelectedIndicator" Style="{StaticResource IndicatorStyle}" />
+                        </DataTemplate>
+                    </IndicatorView.IndicatorTemplate>
+                </IndicatorView>
+
+                <Frame
+                    Grid.Column="1"
+                    Margin="20,0"
+                    Padding="0"
+                    CornerRadius="16">
+                    <Frame.Background>
+                        <LinearGradientBrush>
+                            <GradientStop Color="{StaticResource BackgroundGradientStart}" />
+                            <GradientStop Color="{StaticResource Background}" />
+                        </LinearGradientBrush>
+                    </Frame.Background>
+                    <Grid ColumnDefinitions="*,50">
+                        <Label
+                            Grid.Column="0"
+                            Margin="10"
+                            FontSize="14"
+                            Style="{StaticResource SubHeader}"
+                            Text="Explore"
+                            VerticalOptions="Center" />
+                        <ImageButton
+                            Grid.Column="1"
+                            Padding="14"
+                            BackgroundColor="{StaticResource Accent}"
+                            Clicked="Button_Clicked"
+                            CornerRadius="16"
+                            HeightRequest="50"
+                            HorizontalOptions="End"
+                            Source="NextButtonIcon"
+                            VerticalOptions="Center"
+                            WidthRequest="50" />
+                    </Grid>
+                </Frame>
+
+            </Grid>
+
+
+
+            <BoxView
+                x:Name="FadeBox"
+                Grid.RowSpan="2"
+                InputTransparent="True"
+                Opacity="0"
+                Color="Black" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
