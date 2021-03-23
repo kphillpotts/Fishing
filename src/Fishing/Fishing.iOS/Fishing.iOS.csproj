@@ -136,4 +136,58 @@
       <Name>Fishing</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage1%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage1%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage2%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage2%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage3%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\OnboardImage3%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\SelectedIndicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\SelectedIndicator%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\SelectedIndicator%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\UnselectedIndicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\UnselectedIndicator%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\UnselectedIndicator%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\NextButtonIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\NextButtonIcon%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\NextButtonIcon%403x.png" />
+  </ItemGroup>
 </Project>

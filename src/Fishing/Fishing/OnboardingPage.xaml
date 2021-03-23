@@ -37,7 +37,6 @@
             BackgroundColor="{StaticResource Background}"
             RowDefinitions="1.5*, 1*"
             RowSpacing="0">
-            <BoxView Color="Yellow" />
             <CarouselView
                 Grid.Row="0"
                 Grid.RowSpan="2"
@@ -68,7 +67,7 @@
                     </DataTemplate>
                 </CarouselView.ItemTemplate>
             </CarouselView>
-            <magic:GradientView Margin="0,0,0,-1">
+            <magic:GradientView Margin="0,0,0,-1" InputTransparent="True">
                 <magic:GradientCollection>
                     <magic:RadialGradient
                         x:Name="MyRadialGradient"
@@ -76,6 +75,7 @@
                         RadiusX="3000">
                         <magic:GradientStop Offset="0" Color="Transparent" />
                         <magic:GradientStop Offset=".9" Color="Transparent" />
+                        <magic:GradientStop Offset=".91" Color="#0012140C" />
                         <magic:GradientStop Offset="1" Color="{StaticResource Background}" />
                     </magic:RadialGradient>
                 </magic:GradientCollection>
