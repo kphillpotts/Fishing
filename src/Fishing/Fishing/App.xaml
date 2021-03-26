@@ -31,5 +31,27 @@
             <Setter Property="FontSize" Value="8" />
         </Style>
 
+        <Style x:Key="PageHeader" TargetType="Label">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="FontFamily" Value="SemiBoldFont" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+        <Style x:Key="PageSubHeader" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource BodyText}" />
+            <Setter Property="FontFamily" Value="SemiBoldFont" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style x:Key="SectionHeader" TargetType="Label">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="FontFamily" Value="SemiBoldFont" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+        <Style x:Key="SectionDetail" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource BodyText}" />
+            <Setter Property="FontFamily" Value="SemiBoldFont" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+
     </Application.Resources>
 </Application>

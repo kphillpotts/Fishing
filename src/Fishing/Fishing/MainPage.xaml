@@ -2,44 +2,273 @@
 <ContentPage
     x:Class="Fishing.MainPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Fishing.Controls"
+    xmlns:templates="clr-namespace:Fishing.Templates"
+    xmlns:viewModels="clr-namespace:Fishing.ViewModels"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    BackgroundColor="{StaticResource Background}">
 
-    <Grid>
-        <StackLayout>
-            <Frame
-                Padding="24"
-                BackgroundColor="#2196F3"
-                CornerRadius="0">
-                <Label
-                    FontSize="36"
-                    HorizontalTextAlignment="Center"
-                    Text="Welcome to Xamarin.Forms!"
-                    TextColor="White" />
-            </Frame>
-            <Label
-                Padding="30,10,30,10"
-                FontSize="Title"
-                Text="Start developing now" />
-            <Label
-                Padding="30,0,30,0"
-                FontSize="16"
-                Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" />
-            <Label Padding="30,24,30,0" FontSize="16">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <FormattedString.Spans>
-                            <Span Text="Learn more at " />
-                            <Span FontAttributes="Bold" Text="https://aka.ms/xamarin-quickstart" />
-                        </FormattedString.Spans>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-        </StackLayout>
+    <ContentPage.BindingContext>
+        <viewModels:MainViewModel />
+    </ContentPage.BindingContext>
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <DataTemplate x:Key="personTemplate">
+                <Image
+                    Margin="-15,0,0,0"
+                    HeightRequest="30"
+                    Source="{Binding Image}"
+                    VerticalOptions="Start"
+                    WidthRequest="30">
+                    <Image.Clip>
+                        <RoundRectangleGeometry CornerRadius="15" Rect="0,0,30,30" />
+                    </Image.Clip>
+                </Image>
+            </DataTemplate>
+
+            <DataTemplate x:Key="counterTemplate">
+                <Frame
+                    Margin="-15,0,0,0"
+                    Padding="0"
+                    BackgroundColor="{StaticResource Accent}"
+                    CornerRadius="15"
+                    HeightRequest="30"
+                    VerticalOptions="Start"
+                    WidthRequest="30">
+                    <Label
+                        HorizontalOptions="Center"
+                        Text="{Binding ., StringFormat='{0}+'}"
+                        VerticalOptions="Center" />
+                </Frame>
+            </DataTemplate>
+
+            <templates:PersonCollectionDataTemplateSelector
+                x:Key="personDataTemplateSelector"
+                CounterTemplate="{StaticResource counterTemplate}"
+                PersonTemplate="{StaticResource personTemplate}" />
+
+
+            <ControlTemplate x:Key="TabItemTemplate">
+                <Grid RowSpacing="0">
+                    <Image
+                        Margin="6"
+                        HeightRequest="24"
+                        HorizontalOptions="Center"
+                        Source="{TemplateBinding CurrentIcon}"
+                        VerticalOptions="Center"
+                        WidthRequest="24" />
+                </Grid>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="FabTabItemTemplate">
+                <Grid>
+                    <ImageButton
+                        Margin="6"
+                        Padding="10"
+                        BackgroundColor="{StaticResource Accent}"
+                        CornerRadius="16"
+                        HeightRequest="50"
+                        HorizontalOptions="Center"
+                        InputTransparent="True"
+                        Source="{TemplateBinding CurrentIcon}"
+                        VerticalOptions="Center"
+                        WidthRequest="50" />
+                </Grid>
+            </ControlTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <Grid RowDefinitions="*, 80">
+
+        <ScrollView Orientation="Vertical">
+            <StackLayout Padding="20" Spacing="20">
+
+                <!--  Header  -->
+                <Grid ColumnDefinitions="*,Auto" HorizontalOptions="Fill">
+                    <StackLayout>
+                        <Label Style="{StaticResource PageHeader}" Text="Good Morning" />
+                        <Label Style="{StaticResource PageSubHeader}" Text="It's a great day to strike a fish" />
+                    </StackLayout>
+
+                    <controls:GradientFrame Grid.Column="1" Padding="10">
+
+                        <Image
+                            HeightRequest="50"
+                            Source="{Binding UserImage}"
+                            WidthRequest="50">
+                            <Image.Clip>
+                                <RoundRectangleGeometry CornerRadius="8" Rect="0,0,50,50" />
+                            </Image.Clip>
+                        </Image>
+                    </controls:GradientFrame>
+
+
+
+                </Grid>
+
+                <!--  Weather  -->
+                <controls:GradientFrame>
+                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                        <StackLayout>
+                            <Label Style="{StaticResource SectionHeader}" Text="{Binding Location}" />
+                            <Label
+                                Style="{StaticResource SectionDetail}"
+                                Text="{Binding CurrentDate}"
+                                TextTransform="Uppercase" />
+                            <Label
+                                Style="{StaticResource PageHeader}"
+                                Text="{Binding Temp}"
+                                TextColor="{StaticResource Accent}" />
+
+                        </StackLayout>
+
+
+                        <Image
+                            Grid.Column="1"
+                            Margin="-30,-30,0,0"
+                            HeightRequest="120"
+                            HorizontalOptions="Center"
+                            Source="SunnyIcon"
+                            WidthRequest="120" />
+
+                        <Label
+                            Grid.Row="1"
+                            Style="{StaticResource SectionDetail}"
+                            Text="{Binding WeatherCondition}" />
+
+                        <Label Grid.Row="1" Grid.Column="1">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Style="{StaticResource SectionDetail}" Text="Chance of Rain: " />
+                                    <Span
+                                        Style="{StaticResource SectionDetail}"
+                                        Text="{Binding ChanceOfRain}"
+                                        TextColor="{StaticResource Accent}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                    </Grid>
+                </controls:GradientFrame>
+
+                <!--  Recommended Spots  -->
+                <Label Style="{StaticResource SectionHeader}" Text="Recommended Spots" />
+
+                <CarouselView HeightRequest="360" ItemsSource="{Binding FishingLocations}">
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:GradientFrame Padding="20">
+                                <Grid RowDefinitions="50, 40, 100, 120" RowSpacing="10">
+
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <StackLayout>
+                                            <Label Style="{StaticResource SectionHeader}" Text="{Binding Location.Name}" />
+                                            <Label Style="{StaticResource SectionDetail}" Text="{Binding Location.LatLong}" />
+                                        </StackLayout>
+                                        <ImageButton
+                                            Grid.Column="1"
+                                            Padding="16"
+                                            BackgroundColor="{StaticResource Accent}"
+                                            CornerRadius="16"
+                                            HeightRequest="50"
+                                            Source="LaunchMaps"
+                                            WidthRequest="50" />
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                                        <StackLayout
+                                            Margin="10,0,0,0"
+                                            BindableLayout.ItemTemplateSelector="{StaticResource personDataTemplateSelector}"
+                                            BindableLayout.ItemsSource="{Binding PeopleIcons}"
+                                            Orientation="Horizontal" />
+                                        <StackLayout Grid.Column="1" Spacing="0">
+                                            <Label
+                                                LineBreakMode="MiddleTruncation"
+                                                MaxLines="1"
+                                                Style="{StaticResource SectionDetail}"
+                                                Text="{Binding PeopleAtLocation}"
+                                                TextColor="White" />
+                                            <Label Style="{StaticResource SectionDetail}" Text="are in this location" />
+
+                                        </StackLayout>
+                                    </Grid>
+
+                                    <Grid
+                                        Grid.Row="2"
+                                        ColumnDefinitions="2*,*"
+                                        ColumnSpacing="10">
+                                        <Frame
+                                            Padding="0"
+                                            CornerRadius="8"
+                                            HasShadow="False"
+                                            IsClippedToBounds="True">
+                                            <Image Aspect="AspectFill" Source="{Binding Location.LocationThumbnail}" />
+                                        </Frame>
+                                        <Frame
+                                            Grid.Column="1"
+                                            Padding="0"
+                                            CornerRadius="8"
+                                            HasShadow="False"
+                                            IsClippedToBounds="True">
+
+                                            <Image Aspect="AspectFill" Source="{Binding Location.MapThumbnail}" />
+                                        </Frame>
+                                    </Grid>
+
+                                    <StackLayout Grid.Row="3">
+                                        <Label Style="{StaticResource SectionHeader}" Text="Fish at this area" />
+                                        <StackLayout
+                                            BindableLayout.ItemsSource="{Binding Location.Fish}"
+                                            Orientation="Horizontal"
+                                            Spacing="20">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image
+                                                        Aspect="AspectFit"
+                                                        HorizontalOptions="Start"
+                                                        Source="{Binding Image}"
+                                                        VerticalOptions="Start" />
+
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                </Grid>
+                            </controls:GradientFrame>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+
+                </CarouselView>
+
+
+            </StackLayout>
+        </ScrollView>
+
+
+        <xct:TabView
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            TabStripHeight="80"
+            TabStripPlacement="Bottom">
+            <xct:TabViewItem ControlTemplate="{StaticResource TabItemTemplate}" Icon="TabIcon1.png" />
+            <xct:TabViewItem ControlTemplate="{StaticResource TabItemTemplate}" Icon="TabIcon2.png" />
+            <xct:TabViewItem ControlTemplate="{StaticResource FabTabItemTemplate}" Icon="TabPlus.png" />
+            <xct:TabViewItem ControlTemplate="{StaticResource TabItemTemplate}" Icon="TabIcon3.png" />
+            <xct:TabViewItem ControlTemplate="{StaticResource TabItemTemplate}" Icon="TabIcon4.png" />
+        </xct:TabView>
+
 
         <BoxView
             x:Name="FadeBox"
+            Grid.RowSpan="2"
             InputTransparent="True"
-            Opacity="1"
+            Opacity="0"
             Color="Black" />
     </Grid>
 </ContentPage>
