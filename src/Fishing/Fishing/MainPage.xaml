@@ -159,7 +159,10 @@
                 <!--  Recommended Spots  -->
                 <Label Style="{StaticResource SectionHeader}" Text="Recommended Spots" />
 
-                <CarouselView HeightRequest="360" ItemsSource="{Binding FishingLocations}">
+                <CarouselView
+                    x:Name="FishingLocationCarousel"
+                    HeightRequest="360"
+                    ItemsSource="{Binding FishingLocations}">
                     <CarouselView.ItemTemplate>
                         <DataTemplate>
                             <controls:GradientFrame Padding="20">
@@ -174,6 +177,7 @@
                                             Grid.Column="1"
                                             Padding="16"
                                             BackgroundColor="{StaticResource Accent}"
+                                            Clicked="ImageButton_Clicked"
                                             CornerRadius="16"
                                             HeightRequest="50"
                                             Source="LaunchMaps"

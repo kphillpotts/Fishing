@@ -10,6 +10,7 @@ namespace Fishing.Models
         public List<FishModel> Fish { get; set; }
         public string LocationThumbnail { get; set; }
         public string MapThumbnail { get; set; }
+        public string PanoramaImage { get; set; }
     }
 
 }

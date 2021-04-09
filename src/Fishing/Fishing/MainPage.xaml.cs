@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fishing.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -38,6 +39,12 @@ namespace Fishing
         {
             return true;
             //return VersionTracking.IsFirstLaunchEver;
+        }
+
+        private void ImageButton_Clicked(object sender, EventArgs e)
+        {
+            var locationPage = new FishingLocationPage(FishingLocationCarousel.CurrentItem as FishingLocationviewModel);
+            this.Navigation.PushAsync(locationPage);
         }
     }
 }

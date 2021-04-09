@@ -34,9 +34,10 @@ namespace Fishing.ViewModels
                     LatLong = "8°53'54.2“S 116°18'14.2“E",
                     LocationThumbnail = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Location1.png",
                     MapThumbnail = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Location1Map.png",
+                    PanoramaImage = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/lake-panorama-1.png",
                     People = new System.Collections.Generic.List<PeopleModel>()
                     {
-                        new PeopleModel() 
+                        new PeopleModel()
                         {
                             Name="James",
                             Image="https://randomuser.me/api/portraits/men/13.jpg"
@@ -57,15 +58,20 @@ namespace Fishing.ViewModels
                         new FishModel()
                         {
                             Name="Snapper",
-                            Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish2.png"
+                            Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish2.png",
+                            AnchorX = .25,
+                            AnchorY = .5,
+                            
                         },
                         new FishModel()
                         {
-                            Name="BlueFish",
-                            Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish1.png"
+                            Name="Silver Fish",
+                            Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish1.png",
+                            AnchorX = .75,
+                            AnchorY = .75,
                         }
                     }
-                });
+                }) ;
 
             var secondLocation = new FishingLocationviewModel(
                 new FishingLocationModel()
@@ -74,6 +80,7 @@ namespace Fishing.ViewModels
                     LatLong = "8°53'54.2“S 116°18'14.2“E",
                     LocationThumbnail = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Location2.png",
                     MapThumbnail = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Location2Map.png",
+                    PanoramaImage = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/lake-panorama-2.png",
                     People = new System.Collections.Generic.List<PeopleModel>()
                     {
                         new PeopleModel()
@@ -113,7 +120,10 @@ namespace Fishing.ViewModels
                         new FishModel()
                         {
                             Name="BlueFish",
-                            Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish3.png"
+                            Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish3.png",
+                            AnchorX = .5,
+                            AnchorY = .75
+                            
                         }
                     }
                 });
