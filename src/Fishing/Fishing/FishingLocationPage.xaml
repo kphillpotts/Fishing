@@ -3,14 +3,68 @@
     x:Class="Fishing.FishingLocationPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms">
+    xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+    BackgroundColor="{StaticResource Background}">
 
     <Grid>
-        <forms:SKCanvasView x:Name="Panorama" PaintSurface="SKCanvasView_PaintSurface">
+        <forms:SKCanvasView
+            x:Name="Panorama"
+            EnableTouchEvents="True"
+            PaintSurface="SKCanvasView_PaintSurface"
+            Touch="Panorama_Touch">
             <forms:SKCanvasView.GestureRecognizers>
                 <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated" />
             </forms:SKCanvasView.GestureRecognizers>
         </forms:SKCanvasView>
+
+        <Frame
+            x:Name="Popup"
+            Margin="20"
+            Padding="0"
+            CornerRadius="20"
+            HasShadow="True"
+            VerticalOptions="End">
+            <Grid
+                Padding="20"
+                RowDefinitions="Auto, Auto"
+                VerticalOptions="End">
+                <Grid Grid.Row="0" ColumnDefinitions="Auto, *">
+                    <Image
+                        HeightRequest="100"
+                        Source="SunnyIcon"
+                        WidthRequest="100" />
+                    <StackLayout
+                        Grid.Column="1"
+                        Margin="20"
+                        Spacing="0">
+                        <Label
+                            Style="{StaticResource SectionHeader}"
+                            Text="South Mandalika Lake"
+                            TextColor="Black" />
+                        <Label Style="{StaticResource SectionDetail}" Text="8°53'54.2 S 116°18'14.2 E" />
+
+                    </StackLayout>
+
+                    <BoxView
+                        Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        HeightRequest="1"
+                        VerticalOptions="End"
+                        Color="LightGray" />
+
+                </Grid>
+
+                <Grid Grid.Row="1" ColumnDefinitions="1*, 1.5*">
+                    <Image Margin="0,20" Source="{Binding Location.Fish[0].Image}" />
+                    <forms:SKCanvasView
+                        x:Name="BiteTimeChart"
+                        Grid.Column="1"
+                        Margin="0,0,20,20"
+                        PaintSurface="BiteTimeChart_PaintSurface" />
+                </Grid>
+
+            </Grid>
+        </Frame>
     </Grid>
 
 
