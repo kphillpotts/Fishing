@@ -14,7 +14,7 @@ namespace Fishing.ViewModels
         public string WeatherCondition { get; set; }
         public string WeatherIcon { get; set; }
         public string ChanceOfRain { get; set; }
-        public ObservableRangeCollection<FishingLocationviewModel> FishingLocations {get;set;}
+        public ObservableRangeCollection<FishingLocationViewModel> FishingLocations {get;set;}
 
         public MainViewModel()
         {
@@ -27,7 +27,7 @@ namespace Fishing.ViewModels
             UserImage = "https://randomuser.me/api/portraits/men/43.jpg";
 
 
-            var firstLocation = new FishingLocationviewModel(
+            var firstLocation = new FishingLocationViewModel(
                 new FishingLocationModel()
                 {
                     Name = "South Mandalika Lake",
@@ -57,10 +57,12 @@ namespace Fishing.ViewModels
                     {
                         new FishModel()
                         {
-                            Name="Snapper",
+                            Name="Mysterious Flying Flish",
                             Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish2.png",
                             AnchorX = .25,
                             AnchorY = .5,
+                            FishSize = "1.4 Ft",
+                            BiteChart = GenerateFakeBiteData(),
                             
                         },
                         new FishModel()
@@ -69,11 +71,13 @@ namespace Fishing.ViewModels
                             Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish1.png",
                             AnchorX = .75,
                             AnchorY = .75,
+                            FishSize = "2 Ft",
+                            BiteChart = GenerateFakeBiteData(),
                         }
                     }
                 }) ;
 
-            var secondLocation = new FishingLocationviewModel(
+            var secondLocation = new FishingLocationViewModel(
                 new FishingLocationModel()
                 {
                     Name = "North Mandalika Lake",
@@ -122,18 +126,34 @@ namespace Fishing.ViewModels
                             Name="BlueFish",
                             Image = "https://raw.githubusercontent.com/kphillpotts/Fishing/main/images/Fish3.png",
                             AnchorX = .5,
-                            AnchorY = .75
-                            
+                            AnchorY = .75,
+                            FishSize = "1.1 Ft",
+                            BiteChart = GenerateFakeBiteData(),
+
                         }
                     }
                 });
 
-            FishingLocations = new ObservableRangeCollection<FishingLocationviewModel>();
+            FishingLocations = new ObservableRangeCollection<FishingLocationViewModel>();
             FishingLocations.Add(firstLocation);
             FishingLocations.Add(secondLocation);
 
         }
 
+        Random rnd = new Random();
+
+        private double[] GenerateFakeBiteData()
+        {
+            int hourCount = 24;
+            double[] biteValues = new double[hourCount];
+
+            for (int i = 0; i < hourCount; i++)
+            {
+                var value = rnd.NextDouble();
+                biteValues[i] = value;
+            }
+            return biteValues;
+        }
     }
 
 }

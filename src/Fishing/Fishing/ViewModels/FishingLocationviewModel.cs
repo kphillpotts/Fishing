@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Fishing.ViewModels
 {
-    public class FishingLocationviewModel : BaseViewModel
+    public class FishingLocationViewModel : BaseViewModel
     {
         private FishingLocationModel location;
 
@@ -58,7 +58,7 @@ namespace Fishing.ViewModels
         }
 
 
-        public FishingLocationviewModel(FishingLocationModel location)
+        public FishingLocationViewModel(FishingLocationModel location)
         {
             this.location = location;
         }

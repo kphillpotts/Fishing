@@ -4,7 +4,8 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
-    BackgroundColor="{StaticResource Background}">
+    BackgroundColor="{StaticResource Background}"
+    NavigationPage.HasNavigationBar="False">
 
     <Grid>
         <forms:SKCanvasView
@@ -18,31 +19,71 @@
         </forms:SKCanvasView>
 
         <Frame
+            Padding="10"
+            BorderColor="Transparent"
+            CornerRadius="15"
+            HasShadow="False"
+            HorizontalOptions="Start"
+            TranslationX="20"
+            TranslationY="20"
+            VerticalOptions="Start">
+            <Frame.Background>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Offset=".1" Color="Transparent" />
+                    <GradientStop Offset="1" Color="#33ffffff" />
+                </LinearGradientBrush>
+            </Frame.Background>
+            <Grid>
+                <Button
+                    x:Name="BackNavigation"
+                    BackgroundColor="White"
+                    Clicked="BackNavigation_Clicked"
+                    CornerRadius="10"
+                    HeightRequest="40"
+                    WidthRequest="40" />
+                <Polyline
+                    HorizontalOptions="Center"
+                    Points="10,2 2,8 10,14"
+                    Stroke="Black"
+                    StrokeLineCap="Round"
+                    StrokeThickness="3"
+                    VerticalOptions="Center" />
+
+            </Grid>
+        </Frame>
+
+        <Frame
             x:Name="Popup"
             Margin="20"
             Padding="0"
             CornerRadius="20"
-            HasShadow="True"
+            HasShadow="False"
             VerticalOptions="End">
             <Grid
-                Padding="20"
-                RowDefinitions="Auto, Auto"
+                Padding="0"
+                RowDefinitions="100, 120"
                 VerticalOptions="End">
                 <Grid Grid.Row="0" ColumnDefinitions="Auto, *">
                     <Image
                         HeightRequest="100"
-                        Source="SunnyIcon"
+                        Source="{Binding WeatherIcon}"
                         WidthRequest="100" />
                     <StackLayout
                         Grid.Column="1"
                         Margin="20"
-                        Spacing="0">
+                        Spacing="6"
+                        VerticalOptions="Center">
                         <Label
                             Style="{StaticResource SectionHeader}"
-                            Text="South Mandalika Lake"
+                            Text="{Binding Location.Name}"
                             TextColor="Black" />
-                        <Label Style="{StaticResource SectionDetail}" Text="8°53'54.2 S 116°18'14.2 E" />
-
+                        <StackLayout Orientation="Horizontal">
+                            <Image
+                                HeightRequest="16"
+                                Source="MapIndicator"
+                                WidthRequest="16" />
+                            <Label Style="{StaticResource SectionDetail}" Text="{Binding Location.LatLong}" />
+                        </StackLayout>
                     </StackLayout>
 
                     <BoxView
@@ -54,13 +95,43 @@
 
                 </Grid>
 
-                <Grid Grid.Row="1" ColumnDefinitions="1*, 1.5*">
-                    <Image Margin="0,20" Source="{Binding Location.Fish[0].Image}" />
+                <Grid
+                    Grid.Row="1"
+                    ColumnDefinitions="1*, 1.5*"
+                    RowDefinitions="25, 50, 25">
+
+                    <Label
+                        Margin="20,0"
+                        Style="{StaticResource SectionDetail}"
+                        Text="Bite-Time"
+                        TextColor="{StaticResource BodyText}" />
+                    <Label
+                        Grid.Row="2"
+                        Margin="20,0"
+                        LineBreakMode="NoWrap"
+                        Text="{Binding SelectedFish.Name}"
+                        TextTransform="Uppercase" />
+                    <Image Grid.Row="1" Source="{Binding SelectedFish.Image}" />
                     <forms:SKCanvasView
                         x:Name="BiteTimeChart"
+                        Grid.RowSpan="2"
                         Grid.Column="1"
-                        Margin="0,0,20,20"
+                        Margin="0,0,20,0"
                         PaintSurface="BiteTimeChart_PaintSurface" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{StaticResource SectionDetail}"
+                        Text="00:00"
+                        TextColor="{StaticResource BodyText}" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="0,0,20,0"
+                        HorizontalOptions="End"
+                        Style="{StaticResource SectionDetail}"
+                        Text="24:00"
+                        TextColor="{StaticResource BodyText}" />
                 </Grid>
 
             </Grid>

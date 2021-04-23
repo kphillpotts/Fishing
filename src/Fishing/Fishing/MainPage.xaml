@@ -7,7 +7,8 @@
     xmlns:templates="clr-namespace:Fishing.Templates"
     xmlns:viewModels="clr-namespace:Fishing.ViewModels"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    BackgroundColor="{StaticResource Background}">
+    BackgroundColor="{StaticResource Background}"
+    NavigationPage.HasNavigationBar="False">
 
     <ContentPage.BindingContext>
         <viewModels:MainViewModel />

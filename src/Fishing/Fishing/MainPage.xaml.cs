@@ -43,7 +43,12 @@ namespace Fishing
 
         private void ImageButton_Clicked(object sender, EventArgs e)
         {
-            var locationPage = new FishingLocationPage(FishingLocationCarousel.CurrentItem as FishingLocationviewModel);
+            MainViewModel mainVm = this.BindingContext as MainViewModel;
+            var locationViewModel = FishingLocationCarousel.CurrentItem as FishingLocationViewModel;
+            PanoramaViewModel panViewModel = new PanoramaViewModel(locationViewModel);
+            panViewModel.WeatherIcon = mainVm.WeatherIcon;
+
+            var locationPage = new FishingLocationPage(panViewModel);
             this.Navigation.PushAsync(locationPage);
         }
     }

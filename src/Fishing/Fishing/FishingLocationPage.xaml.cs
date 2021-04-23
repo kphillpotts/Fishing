@@ -18,15 +18,15 @@ namespace Fishing
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FishingLocationPage : ContentPage
     {
-        public FishingLocationPage(ViewModels.FishingLocationviewModel fishingLocationviewModel)
+        public FishingLocationPage(PanoramaViewModel viewModel)
         {
             InitializeComponent();
-            this.viewModel = fishingLocationviewModel;
+            this.viewModel = viewModel;
             this.BindingContext = viewModel;
         }
 
         SKBitmap backgroundBitmap;
-        private FishingLocationviewModel viewModel;
+        private PanoramaViewModel viewModel;
         private int scrollPosition;
         private double lastX;
         private int lineLength = 300;
@@ -36,6 +36,7 @@ namespace Fishing
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+            ClosePopup(animate: false);
 
             // load our background image
             var imageUrl = viewModel.Location.PanoramaImage;
@@ -53,15 +54,16 @@ namespace Fishing
                 fishAnnotations.Add(fish, annotation);
             }
 
-
-            Panorama.InvalidateSurface();
+            ScrollPosition = backgroundBitmap.Width / 2;
         }
 
         private async Task<FishAnnotation> CreateAnnotations(FishModel fish)
         {
             var annotation = new FishAnnotation();
             // create an image for the fish
-            await annotation.CreateAnnotations(fish); 
+            await annotation.CreateLeftAnnotation(fish);
+            await annotation.CreateRightAnnotation(fish);
+            await annotation.CreateOnScreenAnnotation(fish);
             return annotation;
         }
 
@@ -133,7 +135,6 @@ namespace Fishing
 
         private void DrawMarker(SKCanvas canvas, Models.FishModel fish)
         {
-
             // get the absolute position marker
             var markerLocation = GetMarkerAbsolutePos(fish);
 
@@ -155,9 +156,20 @@ namespace Fishing
             }
 
             // draw our bitmap at that rect
-            canvas.DrawBitmap(fishAnnotations[fish].OnscreenAnnotation, annotationRect);
-
-
+            SKBitmap annotation = null;
+            switch (annotationType)
+            {
+                case AnnotationDisplayType.Center:
+                    annotation = fishAnnotations[fish].OnscreenAnnotation;
+                    break;
+                case AnnotationDisplayType.Left:
+                    annotation = fishAnnotations[fish].LeftAnnotation;
+                    break;
+                case AnnotationDisplayType.Right:
+                    annotation = fishAnnotations[fish].RightAnnotation;
+                    break;
+            }
+            canvas.DrawBitmap(annotation, annotationRect);
         }
 
         private SKPoint GetMarkerAbsolutePos(FishModel fish)
@@ -183,22 +195,26 @@ namespace Fishing
             var markerScreenPos = GetMarkerOnScreenPos(fish);
 
             // get annotation
-            var annotation = fishAnnotations[fish].OnscreenAnnotation;
+            //var annotation = fishAnnotations[fish].OnscreenAnnotation;
+            SKBitmap annotation = null;
 
             var annotationType = GetAnnotationDisplayType(fish);
 
             switch (annotationType)
             {
                 case AnnotationDisplayType.Center:
+                    annotation = fishAnnotations[fish].OnscreenAnnotation;
                     SKRect rect = new SKRect(0, 0, annotation.Width, annotation.Height);
                     rect.Location = markerScreenPos;
                     rect.Offset(-(annotation.Width / 2), -(annotation.Height / 2 + lineLength));
                     return rect;
                 case AnnotationDisplayType.Left:
+                    annotation = fishAnnotations[fish].LeftAnnotation;
                     SKRect left = new SKRect(0, 0, annotation.Width, annotation.Height);
                     left.Offset(0, markerScreenPos.Y -(annotation.Height / 2 + lineLength));
                     return left;
                 case AnnotationDisplayType.Right:
+                    annotation = fishAnnotations[fish].RightAnnotation;
                     SKRect right = new SKRect(0, 0, annotation.Width, annotation.Height);
                     right.Offset(ScreenWindowRect.Width - annotation.Width, 
                         markerScreenPos.Y -(annotation.Height / 2 + lineLength));
@@ -268,12 +284,14 @@ namespace Fishing
                         if (onscreenRect.Contains(touchPoint))
                         {
                             clickedOnFish = true;
+                            viewModel.SelectedFish = fish.Key;
+                            BiteTimeChart.InvalidateSurface();
                             AnimateToFish(fish.Key);
                             break;
                         }
                     }
                     if (!clickedOnFish)
-                        AnimateClosePopup();
+                        ClosePopup();
 
 
 
@@ -291,9 +309,14 @@ namespace Fishing
             }
         }
 
-        private void AnimateClosePopup()
+        private void ClosePopup(bool animate = true)
         {
-            Popup.TranslateTo(0, Popup.Height, 400, Easing.SpringIn);
+            var translationValue = Popup.Height + Popup.Margin.Top + Popup.Margin.Bottom;
+
+            if (animate)
+                Popup.TranslateTo(0, translationValue, 400, Easing.SpringIn);
+            else
+                Popup.TranslationY = translationValue;
         }
 
         private void AnimateToFish(FishModel fish)
@@ -323,7 +346,15 @@ namespace Fishing
             Color = Color.FromHex("#BFE05F").ToSKColor(),
             StrokeCap = SKStrokeCap.Round,
             StrokeWidth = 8,
+            IsAntialias = true,
             Style = SKPaintStyle.Stroke,
+        };
+
+        SKPaint chartAxisPaint = new SKPaint()
+        {
+            Color = Color.FromHex("#E7E7E7").ToSKColor(),
+            IsAntialias = true,
+            Style = SKPaintStyle.Fill,
         };
 
         private void BiteTimeChart_PaintSurface(object sender, SkiaSharp.Views.Forms.SKPaintSurfaceEventArgs e)
@@ -332,19 +363,45 @@ namespace Fishing
             var surface = e.Surface;
             var canvas = surface.Canvas;
 
+            if (viewModel.SelectedFish == null) return;
+
             canvas.Clear();
+            var padding = 10;
 
+            var numbers = viewModel.SelectedFish.BiteChart;
+            var barSpacing = e.Info.Width / numbers.Length;
+            var axisPos = e.Info.Height - padding;
+            var chartHeight = e.Info.Height - (2 * padding);
 
-            var barSpacing = e.Info.Width / 24;
-            Random rnd = new Random();
+            SKPoint start = new SKPoint(0,axisPos);
+            SKPoint end = start;
 
-            for (int i = 1; i < 24; i++)
+            
+            for (int i = 0; i < numbers.Length; i++)
             {
-                var barValue = rnd.NextDouble();
-                SKPoint start = new SKPoint((i * barSpacing), e.Info.Height - 10);
-                SKPoint end = new SKPoint((i * barSpacing), (float)(info.Height - (info.Height * barValue)));
-                canvas.DrawLine(start, end, barPaint);
+                var barValue = numbers[i];
+
+                start.Offset(barSpacing, 0);
+                end.Offset(barSpacing, 0);
+
+                if (barValue < .1)
+                {
+                    canvas.DrawCircle(start, 4, chartAxisPaint);
+                }
+                else
+                {
+
+                    var barLength = chartHeight * barValue;
+                    end.Y = (float)(axisPos - barLength);
+
+                    canvas.DrawLine(start, end, barPaint);
+                }
             }
+        }
+
+        private void BackNavigation_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopAsync();
         }
     }
 }
